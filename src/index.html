@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>反诈回拨实验室 · 模拟诈骗来电</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">↗</span><div><strong>反诈回拨实验室</strong><small>SCAM CALL DECOY / LIVE DEMO</small></div></div>
+      <div class="demo-badge"><span class="dot"></span> 公开体验版 · 无真实电话接入</div>
+    </header>
+    <div class="key-setup" id="keySetup"><div><strong>① 配置模型 API Key</strong><small>访客使用自己的 Key；请求经本站转发给所选服务商，不保存 Key。</small></div><div class="key-controls"><select id="providerSelect" aria-label="模型服务商"><option value="deepseek">DeepSeek</option><option value="openai">OpenAI</option></select><input id="apiKeyInput" type="password" placeholder="粘贴所选服务商的 API Key" autocomplete="off" spellcheck="false" /><button id="keyBtn">使用此 Key</button></div><span id="keyStatus">尚未配置</span></div>
+    <div class="fish-setup" id="ttsSetup"><div><strong>② 换成自然的阿姨声音</strong><small id="ttsHelp">Fish Audio 负责语音。<a href="https://fish.audio/developers/" target="_blank" rel="noopener noreferrer">获取语音 Key ↗</a></small></div><div class="fish-controls"><select id="ttsProviderSelect" aria-label="语音服务商"><option value="fish">Fish Audio</option><option value="silicon">硅基流动</option></select><input id="ttsKeyInput" type="password" placeholder="粘贴 Fish Audio API Key" autocomplete="off" spellcheck="false" /><select id="fishModelSelect" aria-label="Fish Audio 语音套餐"><option value="s2.1-pro-free">免费试听</option><option value="s2.1-pro">正式版</option></select><select id="siliconVoiceSelect" aria-label="硅基流动女声音色" hidden><option value="anna">沉稳女声</option><option value="claire">温柔女声</option><option value="diana">欢快女声</option><option value="bella">热情女声</option></select><button id="ttsKeyBtn">使用语音 Key</button></div><span id="ttsStatus">尚未配置</span></div>
+
+    <section class="hero">
+      <div><div class="eyebrow">LIVE CONVERSATION EXPERIMENT <span>01 / VOICE</span></div><h1>让 AI 替你<br><em>接住这通诈骗电话。</em></h1><p>你扮演来电者，对着麦克风说话。AI 扮演“王阿姨”，实时应答并展示对话中暴露的套路。</p></div>
+      <div class="call-card">
+        <div class="call-card-top"><span class="call-tag" id="callTag">等待接入</span><span class="time" id="timer">00:00</span></div>
+        <div class="avatar"><span>王</span><i class="orbit orbit-one"></i><i class="orbit orbit-two"></i></div>
+        <strong>王阿姨</strong><small>AI 受害者角色 · 普通话</small>
+        <div class="bars" id="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="call-state" id="callState">准备好开始模拟通话</div>
+        <div class="voice-tools"><label for="voiceModeSelect">王阿姨音色</label><select id="voiceModeSelect" aria-label="语音来源"><option value="browser">系统朗读</option><option value="cloud">云端自然女声</option></select><select id="voiceSelect" aria-label="系统音色"><option>正在加载中文女声…</option></select><button id="previewVoiceBtn" type="button">试听</button></div>
+        <div class="call-buttons"><button class="primary" id="startBtn">● 开始模拟来电</button><button class="end" id="endBtn" disabled>结束通话</button></div>
+      </div>
+    </section>
+
+    <section class="lower">
+      <div class="conversation panel">
+        <div class="panel-header"><div><span class="section-index">01</span><h2>实时通话记录</h2></div><span class="live-indicator" id="liveIndicator">● 未开始</span></div>
+        <div class="transcript" id="transcript"><div class="empty"><div class="empty-icon">☏</div><strong>等待第一句话</strong><p>点击“开始模拟来电”，再用麦克风说出诈骗话术。</p></div></div>
+        <div class="interim" id="interim"></div>
+        <div class="composer"><button class="mic" id="micBtn" disabled title="点击开始或暂停收音">♩</button><input id="textInput" placeholder="麦克风不可用时，也可以在这里输入来电者的话…" disabled /><button class="send" id="sendBtn" disabled>发送 ↗</button></div>
+        <div class="mic-check"><button id="micTestBtn" type="button">测试麦克风</button><div class="mic-meter" aria-hidden="true"><span id="micLevel"></span></div><span id="micTestResult">说话时测试，看看网页是否收到声音</span></div>
+        <div class="hint" id="hint">建议使用 Chrome，允许麦克风权限；使用耳机可避免 AI 的声音被再次识别。</div>
+      </div>
+      <aside class="insights panel">
+        <div class="panel-header"><div><span class="section-index">02</span><h2>正在识别的信号</h2></div><span class="spark">✳</span></div>
+        <div class="metric"><span>持续通话</span><strong id="metricTime">00:00</strong></div>
+        <div class="metric"><span>对话轮次</span><strong id="metricTurns">00</strong></div>
+        <div class="divider"></div>
+        <div class="insight-heading">话术阶段 <span id="stage">等待对话</span></div>
+        <div class="insight-heading">已识别套路</div><div class="chips" id="tactics"><span class="placeholder">来电者开口后显示</span></div>
+        <div class="insight-heading">对方透露的线索</div><div class="clues" id="clues"><span class="placeholder">尚无线索</span></div>
+        <button class="export" id="exportBtn" disabled>↓ 导出通话记录</button>
+      </aside>
+    </section>
+    <footer>这是受控模拟演示。请使用自己的 API Key；AI 回答由模型即时生成，麦克风识别依赖浏览器，自然语音由所选语音服务生成。</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

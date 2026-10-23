@@ -1,0 +1,8 @@
+dist/
+site.tar.gz
+node_modules/
+.wrangler/
+.openai/
+.env
+.env.*
+.DS_Store
